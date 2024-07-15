@@ -42,6 +42,15 @@ RUN apt-get update -y \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get install -y curl
+RUN apt-get install -y unzip
+RUN apt-get install -y zip
+RUN apt-get install -y jq
+#RUN apt-get install -y openjdk-17-jdk
+#RUN apt-get install -y gradle
+#RUN apt-get install -y npm
+#RUN apt-get install -y wget
+
 RUN adduser --disabled-password --gecos "" --uid 1001 runner \
     && groupadd docker --gid 123 \
     && usermod -aG sudo runner \
@@ -56,4 +65,14 @@ COPY --from=build /usr/local/lib/docker/cli-plugins/docker-buildx /usr/local/lib
 
 RUN install -o root -g root -m 755 docker/* /usr/bin/ && rm -rf docker
 
+ARG NVM_VERSION=0.39.7
+ARG NODE_VERSIONS="18 20 21"
+# Switch back to runner user to install nvm
 USER runner
+SHELL ["/bin/bash", "--login", "-i", "-o", "pipefail", "-c"]
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash
+RUN source $HOME/.bashrc
+# Install Node LTS
+RUN nvm install --lts
+RUN for version in $NODE_VERSIONS; do nvm install $version; done
+RUN nvm use --lts
