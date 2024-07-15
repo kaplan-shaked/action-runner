@@ -45,7 +45,7 @@ RUN apt update -y \
 RUN add-apt-repository ppa:git-core/ppa \
     && apt update -y
 
-RUN adduser --disabled-password --gecos "" --uid 1001 runner \
+RUN adduser --disabled-password --gecos "" --uid 1000 runner \
     && groupadd docker --gid 123 \
     && usermod -aG sudo runner \
     && usermod -aG docker runner \
