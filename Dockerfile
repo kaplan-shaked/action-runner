@@ -1,12 +1,12 @@
 # Source: https://github.com/dotnet/dotnet-docker
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-focal as build
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-bookworm-slim as build
 
-ARG TARGETOS=linux
-ARG TARGETARCH=amd64
-ARG RUNNER_VERSION=v2.317.0
+ARG TARGETOS
+ARG TARGETARCH
+ARG RUNNER_VERSION
 ARG RUNNER_CONTAINER_HOOKS_VERSION=0.6.1
 ARG DOCKER_VERSION=25.0.5
-ARG BUILDX_VERSION=0.16.0
+ARG BUILDX_VERSION=0.13.2
 
 RUN apt update -y && apt install curl unzip -y
 
@@ -30,7 +30,7 @@ RUN export RUNNER_ARCH=${TARGETARCH} \
     "https://github.com/docker/buildx/releases/download/v${BUILDX_VERSION}/buildx-v${BUILDX_VERSION}.linux-${TARGETARCH}" \
     && chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-focal
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV RUNNER_MANUALLY_TRAP_SIG=1
@@ -45,7 +45,7 @@ RUN apt update -y \
 RUN add-apt-repository ppa:git-core/ppa \
     && apt update -y
 
-RUN adduser --disabled-password --gecos "" --uid 1000 runner \
+RUN adduser --disabled-password --gecos "" --uid 1001 runner \
     && groupadd docker --gid 123 \
     && usermod -aG sudo runner \
     && usermod -aG docker runner \
@@ -59,35 +59,4 @@ COPY --from=build /usr/local/lib/docker/cli-plugins/docker-buildx /usr/local/lib
 
 RUN install -o root -g root -m 755 docker/* /usr/bin/ && rm -rf docker
 
-# apt-fast prerequisites
-RUN apt-get update && apt-get install -y software-properties-common; rm -rf /var/lib/apt/lists/*
-# Install apt-fast
-RUN add-apt-repository ppa:apt-fast/stable
-RUN apt-get update && apt-get install -y apt-fast
-RUN echo "alias apt-get='apt-fast --no-install-recommends'" >> /root/.bashrc
-RUN . /root/.bashrc
-
-RUN apt-get install -y curl
-RUN apt-get install -y unzip
-RUN apt-get install -y zip
-RUN apt-get install -y jq
-RUN apt-get install -y openjdk-17-jdk
-RUN apt-get install -y npm
-RUN apt-get install -y wget
-RUN apt-get install -y git
-
-ARG NVM_VERSION=0.39.7
-ARG NODE_VERSIONS="18 20 21"
-# Switch back to runner user to install nvm
 USER runner
-SHELL ["/bin/bash", "--login", "-i", "-o", "pipefail", "-c"]
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash
-RUN source $HOME/.bashrc
-# Install Node LTS
-RUN nvm install --lts
-RUN for version in $NODE_VERSIONS; do nvm install $version; done
-RUN nvm use --lts
-# Install global NPM packages
-RUN npm install -g yarn
-SHELL ["/bin/bash", "--login", "-c"]
-CMD ["/home/runner/run.sh"]
