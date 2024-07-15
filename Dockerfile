@@ -42,6 +42,15 @@ RUN apt-get update -y \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
+
+# apt-fast prerequisites
+RUN apt-get update && apt-get install -y software-properties-common; rm -rf /var/lib/apt/lists/*
+# Install apt-fast
+RUN add-apt-repository ppa:apt-fast/stable
+RUN apt-get update && apt-get install -y apt-fast
+RUN echo "alias apt-get='apt-fast --no-install-recommends'" >> /root/.bashrc
+RUN . /root/.bashrc
+
 RUN apt-get install -y curl
 RUN apt-get install -y unzip
 RUN apt-get install -y zip
@@ -71,7 +80,7 @@ ARG NODE_VERSIONS="18 20 21"
 USER runner
 SHELL ["/bin/bash", "--login", "-i", "-o", "pipefail", "-c"]
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash
-RUN source $HOME/.bashrc
+RUN . $HOME/.bashrc
 # Install Node LTS
 RUN nvm install --lts
 RUN for version in $NODE_VERSIONS; do nvm install $version; done
