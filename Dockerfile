@@ -6,7 +6,7 @@ ARG TARGETARCH=amd64
 ARG RUNNER_VERSION=v2.317.0
 ARG RUNNER_CONTAINER_HOOKS_VERSION=0.6.1
 ARG DOCKER_VERSION=25.0.5
-ARG BUILDX_VERSION=0.13.2
+ARG BUILDX_VERSION=0.16.0
 
 RUN apt update -y && apt install curl unzip -y
 
@@ -38,12 +38,8 @@ ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=1
 
 # 'gpg-agent' and 'software-properties-common' are needed for the 'add-apt-repository' command that follows
 RUN apt update -y \
-    && apt install -y --no-install-recommends sudo lsb-release gpg-agent software-properties-common \
+    && apt install -y --no-install-recommends sudo lsb-release gpg-agent software-properties-common git \
     && rm -rf /var/lib/apt/lists/*
-
-# Configure git-core/ppa based on guidance here:  https://git-scm.com/download/linux
-RUN add-apt-repository ppa:git-core/ppa \
-    && apt update -y
 
 RUN adduser --disabled-password --gecos "" --uid 1001 runner \
     && groupadd docker --gid 123 \
