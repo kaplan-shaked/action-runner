@@ -54,6 +54,7 @@ RUN . /root/.bashrc
 RUN apt-get install -y curl
 RUN apt-get install -y unzip
 RUN apt-get install -y zip
+RUN apt-get install -y git
 RUN apt-get install -y jq
 #RUN apt-get install -y openjdk-17-jdk
 #RUN apt-get install -y gradle
