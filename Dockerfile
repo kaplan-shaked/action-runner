@@ -1,5 +1,5 @@
 # Source: https://github.com/dotnet/dotnet-docker
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-bookworm-slim as build
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-focal as build
 
 ARG TARGETOS=linux
 ARG TARGETARCH=amd64
