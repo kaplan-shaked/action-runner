@@ -56,10 +56,7 @@ RUN apt-get install -y unzip
 RUN apt-get install -y zip
 RUN apt-get install -y git
 RUN apt-get install -y jq
-#RUN apt-get install -y openjdk-17-jdk
-#RUN apt-get install -y gradle
-#RUN apt-get install -y npm
-#RUN apt-get install -y wget
+RUN apt-get install libfreetype-dev -y
 
 RUN adduser --disabled-password --gecos "" --uid 1001 runner \
     && groupadd docker --gid 123 \
