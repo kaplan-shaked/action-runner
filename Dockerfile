@@ -43,6 +43,16 @@ RUN apt-get update -y \
     && rm -rf /var/lib/apt/lists/*
 
 
+RUN apt-get update && apt-get install -y \
+    dphys-swapfile \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configure swap file size
+RUN echo "CONF_SWAPSIZE=10240" > /etc/dphys-swapfile
+
+# Restart dphys-swapfile service to apply changes
+RUN /etc/init.d/dphys-swapfile stop && /etc/init.d/dphys-swapfile start
+
 # apt-fast prerequisites
 RUN apt-get update && apt-get install -y software-properties-common; rm -rf /var/lib/apt/lists/*
 # Install apt-fast
@@ -77,6 +87,7 @@ RUN apt-get install amazon-ecr-credential-helper -y
 
 ARG NVM_VERSION=0.39.7
 ARG NODE_VERSIONS="18 20 21"
+
 # Switch back to runner user to install nvm
 USER runner
 SHELL ["/bin/bash", "--login", "-i", "-o", "pipefail", "-c"]
