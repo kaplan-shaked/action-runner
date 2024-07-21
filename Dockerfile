@@ -73,6 +73,8 @@ COPY --from=build /usr/local/lib/docker/cli-plugins/docker-buildx /usr/local/lib
 
 RUN install -o root -g root -m 755 docker/* /usr/bin/ && rm -rf docker
 
+RUN apt-get install amazon-ecr-credential-helper -y
+
 ARG NVM_VERSION=0.39.7
 ARG NODE_VERSIONS="18 20 21"
 # Switch back to runner user to install nvm
