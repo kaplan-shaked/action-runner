@@ -93,7 +93,7 @@ USER runner
 SHELL ["/bin/bash", "--login", "-i", "-o", "pipefail", "-c"]
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash
 RUN . $HOME/.bashrc
-# Install Node LTS
-RUN nvm install --lts
-RUN for version in $NODE_VERSIONS; do nvm install $version; done
-RUN nvm use --lts
+# # Install Node LTS
+# RUN nvm install --lts
+# RUN for version in $NODE_VERSIONS; do nvm install $version; done
+# RUN nvm use --lts
