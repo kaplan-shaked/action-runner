@@ -49,7 +49,7 @@ RUN apt-get update && apt-get install -y \
 
 
 # install cypress dependencies
-RUN apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb -y && rm -rf /var/lib/apt/lists/*
 
 # Configure swap file size
 RUN echo "CONF_SWAPSIZE=10240" > /etc/dphys-swapfile
