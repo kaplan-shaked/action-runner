@@ -1,17 +1,18 @@
-# Source: https://github.com/dotnet/dotnet-docker
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-jammy as build
 
 ARG TARGETOS=linux
 ARG TARGETARCH
-ARG RUNNER_VERSION=v2.317.0
+ARG RUNNER_VERSION=2.317.0
 ARG RUNNER_CONTAINER_HOOKS_VERSION=0.6.1
 ARG DOCKER_VERSION=25.0.5
-ARG BUILDX_VERSION=0.16.0
+ARG BUILDX_VERSION=0.16.2
 
 RUN apt update -y && apt install curl unzip -y
 
 WORKDIR /actions-runner
-RUN curl -f -L -o runner.tar.gz https://github.com/actions/runner/releases/download/${RUNNER_VERSION}/actions-runner-${TARGETOS}-${TARGETARCH}-${RUNNER_VERSION#v}.tar.gz \
+RUN export RUNNER_ARCH=${TARGETARCH} \
+    && if [ "$RUNNER_ARCH" = "amd64" ]; then export RUNNER_ARCH=x64 ; fi \
+    && curl -f -L -o runner.tar.gz https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-${TARGETOS}-${RUNNER_ARCH}-${RUNNER_VERSION}.tar.gz \
     && tar xzf ./runner.tar.gz \
     && rm runner.tar.gz
 
@@ -29,7 +30,6 @@ RUN export RUNNER_ARCH=${TARGETARCH} \
     && curl -fLo /usr/local/lib/docker/cli-plugins/docker-buildx \
     "https://github.com/docker/buildx/releases/download/v${BUILDX_VERSION}/buildx-v${BUILDX_VERSION}.linux-${TARGETARCH}" \
     && chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
-
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-jammy
 
 ENV DEBIAN_FRONTEND=noninteractive
