@@ -2,9 +2,9 @@ FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-jammy as build
 
 ARG TARGETOS=linux
 ARG TARGETARCH
-ARG RUNNER_VERSION=2.319.1
+ARG RUNNER_VERSION=2.320.0
 ARG RUNNER_CONTAINER_HOOKS_VERSION=0.6.1
-ARG DOCKER_VERSION=25.0.5
+ARG DOCKER_VERSION=27.3.1
 ARG BUILDX_VERSION=0.16.2
 
 RUN apt update -y && apt install curl unzip -y
