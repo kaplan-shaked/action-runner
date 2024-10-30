@@ -95,6 +95,7 @@ RUN apt-get install amazon-ecr-credential-helper -y
 ARG NVM_VERSION=0.39.7
 ARG NODE_VERSIONS="18 20 21"
 
+
 # Switch back to runner user to install nvm
 USER runner
 SHELL ["/bin/bash", "--login", "-i", "-o", "pipefail", "-c"]
