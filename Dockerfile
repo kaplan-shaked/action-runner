@@ -5,7 +5,7 @@ ARG TARGETARCH
 ARG RUNNER_VERSION=2.320.0
 ARG RUNNER_CONTAINER_HOOKS_VERSION=0.6.1
 ARG DOCKER_VERSION=27.3.1
-ARG BUILDX_VERSION=0.16.2
+ARG BUILDX_VERSION=0.17.1
 
 RUN apt update -y && apt install curl unzip -y
 
@@ -86,9 +86,6 @@ COPY --chown=runner:docker --from=build /actions-runner .
 COPY --from=build /usr/local/lib/docker/cli-plugins/docker-buildx /usr/local/lib/docker/cli-plugins/docker-buildx
 
 RUN install -o root -g root -m 755 docker/* /usr/bin/ && rm -rf docker
-
-# install qemu
-RUN apt-get install qemu-user-static -y
 
 RUN apt-get install amazon-ecr-credential-helper -y
 
