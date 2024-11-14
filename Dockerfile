@@ -82,6 +82,9 @@ RUN install -o root -g root -m 755 docker/* /usr/bin/ && rm -rf docker
 
 RUN apt-get install amazon-ecr-credential-helper -y
 
+# Install AWS-CLI
+RUN apt-get install awscli -y
+
 ARG NVM_VERSION=0.39.7
 ARG NODE_VERSIONS="18 20 21"
 
