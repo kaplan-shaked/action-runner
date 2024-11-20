@@ -66,6 +66,7 @@ RUN apt-get install -y jq
 RUN apt-get install libfreetype-dev -y
 RUN apt-get install fontconfig -y
 RUN apt-get install libsodium-dev -y
+RUN apt-get install podman -y
 
 RUN adduser --disabled-password --gecos "" --uid 1001 runner \
     && groupadd docker --gid 123 \
