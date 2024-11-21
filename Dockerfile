@@ -86,6 +86,11 @@ RUN install -o root -g root -m 755 docker/* /usr/bin/ && rm -rf docker
 
 RUN apt-get install amazon-ecr-credential-helper -y
 
+RUN curl -fsSL https://github.com/GoogleContainerTools/jib/releases/download/v0.13.0-cli/jib-jre-0.13.0.zip -o jib-cli.zip \
+    && unzip jib-cli.zip -d jib-0.13.0 \
+    && rm jib-cli.zip \
+    && ln -s /home/runner/jib-0.13.0/bin/jib /usr/local/bin/jib
+
 # Install AWS-CLI
 RUN apt-get install awscli -y
 
