@@ -94,6 +94,10 @@ RUN curl -fsSL https://github.com/GoogleContainerTools/jib/releases/download/v0.
 # Install AWS-CLI
 RUN apt-get install awscli -y
 
+# Increase stack size limit
+RUN echo "* soft stack 65536" >> /etc/security/limits.conf && \
+    echo "* hard stack 65536" >> /etc/security/limits.conf
+
 ARG NVM_VERSION=0.39.7
 ARG NODE_VERSIONS="18 20 21"
 
